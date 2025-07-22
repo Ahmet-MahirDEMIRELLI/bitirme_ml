@@ -1,15 +1,12 @@
 from helpers.get_user_choice import get_user_choice
-from helpers.load_wav_data import load_wav_data
+from helpers.load_wav_data_as_png import load_spectrogram
 from helpers.plot_signal import plot_signal
+import torch
 
 def train_model():
     model = None
-    print(".wav verisi yükleniyor...")
-    X, y = load_wav_data(sr=22050)
-    print(f"{len(X)} adet ses dosyası okundu")
-    
-    for i in range(0,3):
-        plot_signal(X[i], y[i])
+    print(".wav verisi png olarak yükleniyor...")
+    dataloader, label_encoder = load_spectrogram()
     
     # Kodunu buraya ekle
     print("Model eğitiliyor...")
@@ -40,4 +37,6 @@ def main():
         
 
 if __name__ == "__main__":
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f"device: {device}")
     main()
