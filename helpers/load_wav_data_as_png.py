@@ -12,7 +12,7 @@ import torch.nn.functional as F
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
-def save_as_png_spectrogram(S, sr, hop_length, save_path):
+def save_as_png(S, sr, hop_length, save_path):
     plt.figure(figsize=(10, 4))
     librosa.display.specshow(S, sr=sr, hop_length=hop_length, x_axis='time', y_axis='linear')
     plt.axis('off')
@@ -74,7 +74,7 @@ def load_spectrogram(base_dir="Data/genres_original", target_dir="processed_data
                     S = librosa.amplitude_to_db(np.abs(X))
 
                     save_path = os.path.join(genre_output_dir, file_name.replace('.wav', '.png'))
-                    save_as_png_spectrogram(S, sr, hop_length, save_path)
+                    save_as_png(S, sr, hop_length, save_path)
 
                 except Exception as e:
                     print(f"Hata: {file_path}")
@@ -105,7 +105,7 @@ def load_mel_spectrogram(base_dir="Data/genres_original", target_dir="processed_
                     logS = librosa.power_to_db(abs(S))
 
                     save_path = os.path.join(genre_output_dir, file_name.replace('.wav', '.png'))
-                    save_as_png_spectrogram(logS, sr, hop_length, save_path)
+                    save_as_png(logS, sr, hop_length, save_path)
 
                 except Exception as e:
                     print(f"Hata: {file_path}")
