@@ -82,3 +82,34 @@ def load_spectrogram(base_dir="Data/genres_original", target_dir="processed_data
                     continue
 
     return prepare_data_from_pngs(target_dir, img_size, batch_size)
+    
+def load_mel_spectrogram(base_dir="Data/genres_original", target_dir="processed_data/mel_spectrogram", img_size=(128, 128), batch_size=32):
+    if os.path.exists(target_dir):
+        return prepare_data_from_pngs(target_dir, img_size, batch_size)
+
+    for genre in sorted(os.listdir(base_dir)):
+        genre_path = os.path.join(base_dir, genre)
+        if not os.path.isdir(genre_path):
+            continue
+
+        genre_output_dir = os.path.join(target_dir, genre)
+        os.makedirs(genre_output_dir, exist_ok=True)
+
+        for file_name in os.listdir(genre_path):
+            if file_name.endswith(".wav"):
+                file_path = os.path.join(genre_path, file_name)
+                try:
+                    x, sr = librosa.load(file_path, sr=None)
+                    hop_length = 256
+                    S = librosa.feature.melspectrogram(y=x, sr=sr, n_fft=4096, hop_length=hop_length)
+                    logS = librosa.power_to_db(abs(S))
+
+                    save_path = os.path.join(genre_output_dir, file_name.replace('.wav', '.png'))
+                    save_as_png_spectrogram(logS, sr, hop_length, save_path)
+
+                except Exception as e:
+                    print(f"Hata: {file_path}")
+                    print(e)
+                    continue
+
+    return prepare_data_from_pngs(target_dir, img_size, batch_size)

@@ -1,12 +1,13 @@
 from helpers.get_user_choice import get_user_choice
-from helpers.load_wav_data_as_png import load_spectrogram
+from helpers.load_wav_data_as_png import load_spectrogram, load_mel_spectrogram
 from helpers.plot_signal import plot_signal
 import torch
 
 def train_model():
     model = None
     print(".wav verisi png olarak yükleniyor...")
-    dataloader, label_encoder = load_spectrogram()
+    # dataloader, label_encoder = load_spectrogram()
+    dataloader, label_encoder = load_mel_spectrogram()
     
     # Kodunu buraya ekle
     print("Model eğitiliyor...")
